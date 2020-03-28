@@ -62,6 +62,7 @@ namespace DDHCenter.Views
             LookForUpdatesText.Text = "Buscando...";
             LookForUpdatesProgressBar.Visibility = System.Windows.Visibility.Visible;
             PopUpBoxM.IsPopupOpen = true;
+            var systemArchitecture = IntPtr.Size == 8 ? 0 : 1;
             //Make a request to Github
             var cliente = DDHCenter.Core.Utils.ApiClient<DDHCenter.Core.Models.GithubApiModel>.Instance;
             try
@@ -69,36 +70,36 @@ namespace DDHCenter.Views
                 System.Net.ServicePointManager.Expect100Continue = true;
                 System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
                 var result = await cliente.GetModelAsync("https://api.github.com/repos/caesar96/DDHCenter/releases/latest");
-                if (result != null && result.Assets != null && result.Assets[0] != null && result.Assets[0].DownloadUrl != null)
+                if (result != null && result.Assets != null && result.Assets[systemArchitecture] != null && result.Assets[systemArchitecture].DownloadUrl != null)
                 {
                     var currentVersion =  System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                     var updateVersion = new Version(result.TagName.Replace("v", ""));
                     var comparedVersions = updateVersion.CompareTo(currentVersion);
-                    updateFileName = System.IO.Path.GetTempPath() + result.Assets[0].Name;
+                    updateFileName = System.IO.Path.GetTempPath() + result.Assets[systemArchitecture].Name;
 
                     if (comparedVersions > 0)
                     {
                         LookForUpdatesText.Text = "Descargando...";
-                        await cliente.DownloadFile(result.Assets[0].DownloadUrl, updateFileName);
+                        await cliente.DownloadFile(result.Assets[systemArchitecture].DownloadUrl, updateFileName);
                         HasFoundUpdate = true;
                         LookForUpdatesText.Text = "¡Actualizar ahora!";
                         LookForUpdatesText.FontWeight = System.Windows.FontWeights.Bold;
                     }
-                    else
-                    {
-                        LookForUpdatesText.Text = "Buscar actualizaciones";
-                        MessageBox.Show("¡No hay actualizaciones disponibles!");
-                    }
-                        
-
-                    //
-                    LookForUpdatesProgressBar.Visibility = System.Windows.Visibility.Collapsed;
-
                 }
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.ToString());
+            }
+            finally
+            {
+                if (!HasFoundUpdate)
+                {
+                    MessageBox.Show("¡No hay actualizaciones disponibles!");
+                    LookForUpdatesText.Text = "Buscar actualizaciones";
+                }
+                    
+                LookForUpdatesProgressBar.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
     }
