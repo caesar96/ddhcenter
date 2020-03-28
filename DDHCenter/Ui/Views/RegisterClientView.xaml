@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="DDHCenter.Ui.Views.RegisterClientView"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+            xmlns:local="clr-namespace:DDHCenter"
+            xmlns:converters="clr-namespace:DDHCenter.Ui.Converters"
+            xmlns:controls="clr-namespace:DDHCenter.Ui.Controls"      
+            xmlns:viewModels="clr-namespace:DDHCenter.Core.ViewModels"
+            xmlns:views="clr-namespace:DDHCenter.Ui.Views"             
+            TextElement.FontWeight="Regular"
+            TextElement.FontSize="12"
+            TextOptions.TextFormattingMode="Ideal"
+            TextOptions.TextRenderingMode="Auto"
+            FontFamily="{DynamicResource MaterialDesignFont}">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewModels:CreateDateControlViewModel}">
+            <controls:CreateDateControl />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:RegisterClientRecommendedMedsViewModel}">
+            <views:RegisterClientRecommendedMedsView />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:RegisterClientBoughtMedsViewModel}">
+            <views:RegisterClientBoughtMedsView />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:DeliveredDateControlViewModel}">
+            <controls:DeliveredDateControl />
+        </DataTemplate>
+        
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="Return" Command="{Binding Path=RegisterClientCommand}" />
+    </UserControl.InputBindings>
+    <!-- -->
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Background="#fafafa" Padding="10 20 20 0" CornerRadius="10 10 0 0" BorderThickness="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.ColumnSpan="2" Grid.RowSpan="4" HorizontalAlignment="Center" Margin="0 0 0 7">
+                        <TextBlock Text="Foto del cliente" FontSize="20" FontWeight="Bold" Margin="0 0 0 10" HorizontalAlignment="Center"/>
+                        <Grid Width="200" Margin="10">
+                            <Border Name="ReceiverColor" BorderThickness="0" CornerRadius="100">
+                                <Grid>
+                                    <Border x:Name="Mask" Background="White" CornerRadius="100">
+                                    </Border>
+                                    <StackPanel>
+                                        <Image Name="Receiver" Source="{Binding Path=ImageUri, Converter={converters:UriToStreamToSourceConverter}, ConverterParameter='/Ui/Images/client_generic.jpg'}"/>
+                                        <StackPanel.OpacityMask>
+                                            <VisualBrush Visual="{Binding ElementName=Mask}" />
+                                        </StackPanel.OpacityMask>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Button Command="{Binding Path=UploadClientImageCommand}" Style="{StaticResource MaterialDesignRaisedLightButton}" Width="125" ToolTip="Buscar imagen">
+                            <Button.Content>
+                                <Grid>
+                                    <TextBlock Visibility="{Binding Path=IsUploadingImage, Converter={converters:BooleanToVisibilityConverterInverse}}"  Text="Buscar imagen" />
+                                    <ProgressBar x:Name="progressBarLogin"  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True" Foreground="White" Visibility="{Binding Path=IsUploadingImage, Converter={converters:BooleanToVisibilityConverter}}" />
+                                </Grid>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Telefono -->
+                    <TextBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Path=Cliente.Address, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Dirección"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Path=Cliente.ReferenceAddress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Dirección de referencia."/>
+                    <TextBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1" Text="{Binding Path=Cliente.Age, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Edad" />
+                    <DatePicker Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="Fecha de cumpleaños"  SelectedDateFormat="Short"  Language="es-MX" Style="{StaticResource MyDatePicker}" x:Name="datecontrol" SelectedDate="{Binding Path=Cliente.BirthDay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Path=Cliente.Curp, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="CURP" />
+                    <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="1" Text="{Binding Path=Cliente.Phone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Teléfono"/>
+                    <TextBox Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Text="{Binding Path=Cliente.ReferencePhone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Teléfono de referencia"/>
+                    <Button Grid.Row="4" Content="Citas" Background="#ebebeb" Foreground="#333" Command="{Binding Path=ShowCreateDateControlViewCommand}" Width="60" Padding="0" Margin="7 0 7 0" FontSize="12" Style="{StaticResource MaterialDesignFlatButton}"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button  Background="#ebebeb" Foreground="#333" Command="{Binding Path=ShowRegisterClientRecommendedMedsViewCommand}" Content="Medicamentos" Width="95" Padding="0" Margin="0 0 7 0" FontSize="12"  Style="{StaticResource MaterialDesignFlatButton}"/>
+                        <Border Background="#ebebeb" Padding="10 2 10 2" >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Ventas" VerticalAlignment="Center" FontWeight="Medium" FontSize="14" Foreground="#333"/>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignCentres"  StaysOpen="False" VerticalAlignment="Center">
+                                    <StackPanel>
+                                        <Button Content="Si" Command="{Binding Path=ShowRegisterClientBoughtMedsViewCommand}"/>
+                                        <Separator/>
+                                        <Button Content="No" Command="{Binding Path=ShowDeliverDateControlCommand}"/>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                    
+                    <Border Grid.Row="5" Grid.ColumnSpan="5" Background="#fafafa" BorderThickness="0" Margin="0 15 0 15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Row="0" Grid.Column="0" Kind="UserTie" VerticalAlignment="Center" Height="30" Width="40"/>
+                            <materialDesign:PackIcon Grid.Row="1" Grid.Column="0" Kind="GenderMaleFemale" VerticalAlignment="Center" Height="30" Width="40"/>
+
+                            <!-- Nombre -->
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Cliente.FirstName, UpdateSourceTrigger=PropertyChanged}" x:Name="textBoxFirstName" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Nombre (s)"/>
+                            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=Cliente.LastName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Apellido (s)" />
+                            <!-- Direccion -->
+
+                            <Border Grid.Row="1" Grid.Column="1" Margin="5" Padding="15" Background="#ebebeb" Grid.ColumnSpan="2">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                    <Label>Género:</Label>
+                                    <RadioButton x:Name="rdbtnHombre" Content="Hombre" IsChecked="{Binding Path=IsMale, UpdateSourceTrigger=PropertyChanged}" />
+                                    <RadioButton x:Name="rdbtnMujer" Content="Mujer"  IsChecked="{Binding Path=IsFemale, UpdateSourceTrigger=PropertyChanged}" />
+                                    <RadioButton x:Name="rdbtnOtro" Content="Otro" IsChecked="{Binding Path=IsOtherGenre, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    
+                    <Border Grid.Row="6" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+
+                        <ContentControl Content="{Binding Path=ClientExtraView}"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="10" Background="#ccc">
+                <Button Command="{Binding Path=RegisterClientCommand}" x:Name="btnNext" Height="50" Style="{DynamicResource MaterialDesignRaisedButton}" FontSize="18" MaxWidth="160" >
+                    <Button.Content>
+                        <Grid>
+                            <TextBlock Visibility="{Binding Path=IsSendingRequest, Converter={converters:BooleanToVisibilityConverterInverse}}"  Text="Registrar" />
+                            <ProgressBar  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True" Foreground="White" Visibility="{Binding Path=IsSendingRequest, Converter={converters:BooleanToVisibilityConverter}}" />
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

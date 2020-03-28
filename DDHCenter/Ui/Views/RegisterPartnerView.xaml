@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="DDHCenter.Ui.Views.RegisterPartnerView"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+            xmlns:local="clr-namespace:DDHCenter"
+            xmlns:converters="clr-namespace:DDHCenter.Ui.Converters"
+            TextElement.FontWeight="Regular"
+            TextElement.FontSize="12"
+            TextOptions.TextFormattingMode="Ideal"
+            TextOptions.TextRenderingMode="Auto"
+            FontFamily="{DynamicResource MaterialDesignFont}">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Return" Command="{Binding Path=RegisterPartnerCommand}" CommandParameter="{Binding ElementName=psswdBoxElement}" />
+    </UserControl.InputBindings>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Background="#fafafa" Padding="10 20 20 0" CornerRadius="10 10 0 0" BorderThickness="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.ColumnSpan="2" Grid.RowSpan="4" HorizontalAlignment="Center" Margin="0 0 0 7">
+                        <TextBlock Text="Foto de perfil" FontSize="20" FontWeight="Bold" Margin="0 0 0 10" HorizontalAlignment="Center"/>
+                        <Grid Width="200" Margin="10">
+                            <Border Name="ReceiverColor" BorderThickness="0" CornerRadius="100">
+                                <Grid>
+                                    <Border x:Name="Mask" Background="White" CornerRadius="100">
+                                    </Border>
+                                    <StackPanel>
+                                        <Image Name="Receiver" Source="{Binding Path=StreamedImage, Converter={converters:UriToStreamToSourceConverter}}"/>
+                                        <StackPanel.OpacityMask>
+                                            <VisualBrush Visual="{Binding ElementName=Mask}" />
+                                        </StackPanel.OpacityMask>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <Button Command="{Binding Path=UploadSocioImageCommand}" Style="{StaticResource MaterialDesignRaisedLightButton}" Width="125" ToolTip="Buscar imagen">
+                            <Button.Content>
+                                <Grid>
+                                    <TextBlock Visibility="{Binding Path=IsUploadingImage, Converter={converters:BooleanToVisibilityConverterInverse}}"  Text="Buscar imagen" />
+                                    <ProgressBar x:Name="progressBarLogin"  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True" Foreground="White" Visibility="{Binding Path=IsUploadingImage, Converter={converters:BooleanToVisibilityConverter}}" />
+                                </Grid>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Telefono -->
+                    <TextBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Path=Socio.Address, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Dirección"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="1" Text="{Binding Path=Socio.Age, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Edad" />
+                    <TextBox Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding Path=Socio.Phone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Teléfono"/>
+                    <TextBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Text="{Binding Path=Socio.Curp, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="CURP" />
+
+                    <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="1" Text="{Binding Path=Socio.Dim, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="D.I.M"/>
+                    <DatePicker Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="Fecha de cumpleaños"  SelectedDateFormat="Short"  Language="es-MX" Style="{StaticResource MyDatePicker}" x:Name="datecontrol" SelectedDate="{Binding Path=Socio.BirthDate, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Border Grid.Row="4" Grid.ColumnSpan="5" Background="#fafafa" BorderThickness="0" Margin="0 15 0 15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Row="0" Grid.Column="0" Kind="GenderMaleFemale" VerticalAlignment="Center" Height="30" Width="40"/>
+                            <materialDesign:PackIcon Grid.Row="1" Grid.Column="0" Kind="UserTie" VerticalAlignment="Center" Height="30" Width="40"/>
+                            <materialDesign:PackIcon Grid.Row="2" Grid.Column="0" Kind="KeyVariant" VerticalAlignment="Center" Height="30" Width="40"/>
+
+                            <!-- Nombre -->
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Socio.FirstName, UpdateSourceTrigger=PropertyChanged}" x:Name="textBoxFirstName" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Nombre (s)"/>
+                            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Path=Socio.LastName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTexBox}" materialDesign:HintAssist.Hint="Apellido (s)" />
+                            <PasswordBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" Style="{StaticResource MyPasswordBox}" x:Name="psswdBoxElement" materialDesign:HintAssist.Hint="Contraseña" Width="Auto"/>
+                            <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5 15 5 15" Background="#ebebeb">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                    <Label>Género:</Label>
+                                    <RadioButton x:Name="rdbtnHombre" Content="Hombre" IsChecked="{Binding Path=IsMale, UpdateSourceTrigger=PropertyChanged}" />
+                                    <RadioButton x:Name="rdbtnMujer" Content="Mujer"  IsChecked="{Binding Path=IsFemale, UpdateSourceTrigger=PropertyChanged}" />
+                                    <RadioButton x:Name="rdbtnOtro" Content="Otro" IsChecked="{Binding Path=IsOtherGenre, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </Border>
+                            <!-- Direccion -->
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="10" Background="#ccc">
+                <Button Command="{Binding Path=RegisterPartnerCommand}" CommandParameter="{Binding ElementName=psswdBoxElement}" x:Name="btnNext" Height="50" Style="{DynamicResource MaterialDesignRaisedButton}" FontSize="18" MaxWidth="160" >
+                    <Button.Content>
+                        <Grid>
+                            <TextBlock Visibility="{Binding Path=IsSendingRequest, Converter={converters:BooleanToVisibilityConverterInverse}}"  Text="Registrar" />
+                            <ProgressBar  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True" Foreground="White" Visibility="{Binding Path=IsSendingRequest, Converter={converters:BooleanToVisibilityConverter}}" />
+                        </Grid>
+                    </Button.Content>
+                </Button>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

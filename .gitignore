@@ -1,0 +1,10 @@
+Debug/
+packages/
+obj/
+Release_x64/
+Release_x86/
+
+*.dll
+*.pdb
+*.exe
+*.manifest

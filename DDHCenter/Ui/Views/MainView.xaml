@@ -1,0 +1,288 @@
+﻿<Window x:Class="DDHCenter.Views.MainView"
+        x:Name="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="clr-namespace:DDHCenter.Ui.Converters"
+        xmlns:viewModels="clr-namespace:DDHCenter.Core.ViewModels"
+        xmlns:views="clr-namespace:DDHCenter.Ui.Views"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="18"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Background="{DynamicResource MaterialDesignPaper}"        
+        Icon="/Ui/Images/ddhcenter_logo.ico"
+        WindowState="Maximized"
+        Title="DDH Center!">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+            <views:HomeView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ConfigurationViewModel}">
+            <views:ConfigurationView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:RegisterPartnerViewModel}">
+            <views:RegisterPartnerView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:RegisterMedicineViewModel}">
+            <views:RegisterMedicineView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:RegisterClientViewModel}">
+            <views:RegisterClientView />
+        </DataTemplate>
+
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="btnShowClose">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="btnShowClose">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>        
+    </Window.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Width="275" MaxWidth="350" x:Name="MainPageSideBar" Margin="0 0 0 0" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+            <Border.Effect>
+                <DropShadowEffect  Opacity="0.1" />
+            </Border.Effect>
+            <Border.Background>
+                <ImageBrush ImageSource="/Ui/Images/sidebar-5.jpg"  Stretch="UniformToFill" />
+            </Border.Background>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0">
+                <ScrollViewer.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0.7">
+                        <GradientStop Color="#002a3e" Offset="0"/>
+                        <GradientStop Color="#01547c" Offset="1"/>
+                    </LinearGradientBrush>
+                </ScrollViewer.Background>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel.Resources>
+                        <Style TargetType="RadioButton" BasedOn="{StaticResource RadioButtonMainSideBarStyle}" />
+                    </StackPanel.Resources>
+                    <Border Padding="5">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image Source="/Ui/Images/ddhcenter_logo_150x148.png" Height="100" Width="100" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10, 5"/>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="#787878" BorderThickness="0.6" Margin="5, 0"/>
+                    <StackPanel>
+                        <Expander Background="Transparent" Foreground="#fafafa" FontWeight="SemiBold" Style="{DynamicResource ExpanderStyle1}" ExpandDirection="Down" Margin="5">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Grid Width="60" Margin="15 0" VerticalAlignment="Top" HorizontalAlignment="Center">
+                                        <Border Name="ReceiverColor" BorderThickness="0" CornerRadius="100">
+                                            <Grid>
+                                                <Border x:Name="Mask" Background="White" CornerRadius="100">
+                                                </Border>
+                                                <StackPanel>
+                                                    <Image Name="Receiver" Source="{Binding Socio.ImageUrl, Converter={converters:UrlToSourceConverter}}" />
+                                                    <StackPanel.OpacityMask>
+                                                        <VisualBrush Visual="{Binding ElementName=Mask}" />
+                                                    </StackPanel.OpacityMask>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                    <TextBlock x:Name="userNameTextBlock" Text="{Binding Socio.FirstName}" VerticalAlignment="Center" FontSize="17" />
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                                <RadioButton GroupName="Pages" Command="{Binding ChangePageCommand}" CommandParameter="{Binding PageViewModels.[1]}">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="SettingsTransfer" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Configuración" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                                <RadioButton GroupName="Pages" Command="{Binding LogoutCommand}" CommandParameter="{Binding ElementName=MainWindow}">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="UserRemoveOutline" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Cerrar sesión" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                                <RadioButton GroupName="Pages" Command="{Binding CloseViewCommand}" CommandParameter="{Binding ElementName=MainWindow}">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="ExitToApp" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Salir" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                            </StackPanel>
+                        </Expander>
+
+                    </StackPanel>
+                    <Border Width="{Binding Width, ElementName=MainSidebarStackPanel}" BorderBrush="#787878" BorderThickness="0.6" Margin="5, 0"/>
+                    <StackPanel x:Name="MainSidebarStackPanel">
+                        <Expander Background="Transparent" Foreground="#fafafa" FontWeight="SemiBold" Style="{DynamicResource ExpanderStyle1}" ExpandDirection="Down" Margin="5">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="BookOpenPageVariant" VerticalAlignment="Center" Height="20" Width="50"/>
+                                    <TextBlock Text="Administrar" VerticalAlignment="Center" FontSize="15" />
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel Orientation="Vertical">
+                                <RadioButton Content="+  Agenda de actividades" GroupName="Pages"/>
+                                <RadioButton Content="+  Clientes" GroupName="Pages"/>
+                                <RadioButton Content="+  Portafolio" GroupName="Pages"/>
+                                <RadioButton Content="+  Categorías" GroupName="Pages" />
+                            </StackPanel>
+                        </Expander>
+
+                        <Expander Background="Transparent" Foreground="#fafafa" FontWeight="SemiBold" Style="{DynamicResource ExpanderStyle1}" ExpandDirection="Down" Margin="5">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="PencilAddOutline" VerticalAlignment="Center" Height="20" Width="50"/>
+                                    <TextBlock Text="Registrar" VerticalAlignment="Center" FontSize="15" />
+                                </StackPanel>
+                            </Expander.Header>
+                            <StackPanel Orientation="Vertical">
+                                <RadioButton GroupName="Pages" Command="{Binding ChangePageCommand}" CommandParameter="{Binding PageViewModels.[3]}">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="Medicine" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Medicamento" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                                <RadioButton GroupName="Pages" Command="{Binding ChangePageCommand}" CommandParameter="{Binding PageViewModels.[2]}">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <materialDesign:PackIcon Kind="UserCardDetails" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Socio" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                                <RadioButton GroupName="Pages">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="AccountBadge" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Promotor" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                                <RadioButton GroupName="Pages">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="CityVariantOutline" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Municipio" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                                <RadioButton GroupName="Pages" Command="{Binding ChangePageCommand}" CommandParameter="{Binding PageViewModels.[4]}">
+                                    <RadioButton.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="BriefcaseAccount" VerticalAlignment="Center" Height="20" Width="50"/>
+                                            <TextBlock Text="Cliente" VerticalAlignment="Center" FontSize="12" />
+                                        </StackPanel>
+                                    </RadioButton.Content>
+                                </RadioButton>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+
+
+                </StackPanel>
+            </ScrollViewer>
+
+        </Border>
+
+        <Grid Grid.Column="1" x:Name="MainContentGrid" Margin="0" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.Background>
+                <ImageBrush ImageSource="/Ui/Images/login_bg_sidebar.png" Stretch="Uniform" Viewport="0, 0, 100, 100" ViewportUnits="Absolute" TileMode="FlipX"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Padding="10" Background="{DynamicResource MaterialDesignPaper}" VerticalAlignment="Top" BorderThickness="0, 0, 0, 1" BorderBrush="#ccc">
+                <Border.Effect>
+                    <DropShadowEffect  Opacity="0.2"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                        <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}" x:Name="btnShowClose" Width="40" Height="40" ToolTip="Ocultar o mostrar el menú">
+                            <ToggleButton.Background>
+                                <SolidColorBrush Color="#ccc" Opacity=".5" />
+                            </ToggleButton.Background>
+                            <ToggleButton.Content>
+                                <materialDesign:PackIcon  Kind="HamburgerMenuBack" VerticalAlignment="Center" Height="40" Width="24"  />
+                            </ToggleButton.Content>
+                            <materialDesign:ToggleButtonAssist.OnContent>
+                                <materialDesign:PackIcon Kind="Menu" VerticalAlignment="Center" Height="40" Width="24"/>
+                            </materialDesign:ToggleButtonAssist.OnContent>
+                        </ToggleButton>
+
+                    </StackPanel>
+
+                    <materialDesign:Snackbar Grid.Column="0" IsActive="{Binding HasErrors}" Grid.ColumnSpan="3" MessageQueue="{materialDesign:MessageQueue}" x:Name="SnackbarSeven" VerticalContentAlignment="Center">
+                        <materialDesign:SnackbarMessage x:Name="SnackbarSevenMessage" Content="{Binding Message}"/>
+                    </materialDesign:Snackbar>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding HasErrors, Converter={converters:BooleanToVisibilityConverterInverse}}">
+                        <TextBlock Text="{Binding MainHeaderText}"  x:Name="texblockMainHeader" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Margin="0" x:Name="PopUpBoxM">
+                            <StackPanel>
+                                <Button Content="Pantalla Completa" Command="{Binding FullScreenCommand}" x:Name="FullScreeenBtn" Click="FullScreeenBtn_Click"/>
+                                <Button x:Name="LookForUpdatesBtn" Click="LookForUpdatesBtn_Click">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <ProgressBar  Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True" Foreground="#333" Visibility="Collapsed"  x:Name="LookForUpdatesProgressBar" Margin="0 0 10 0"/>
+                                            <TextBlock x:Name="LookForUpdatesText" Text="Buscar actualizaciones" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Separator/>
+                                <Button Content="Salir" Command="{Binding CloseViewCommand}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1">
+                <Border.Background>
+                    <SolidColorBrush Color="#333" Opacity=".3" />
+                </Border.Background>
+                <ContentControl Content="{Binding CurrentPageViewModel}"/>
+            </Border>
+
+        </Grid>
+    </Grid>
+</Window>

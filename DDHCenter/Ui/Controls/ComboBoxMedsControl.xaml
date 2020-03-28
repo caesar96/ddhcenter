@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="DDHCenter.Ui.Controls.ComboBoxMedsControl"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="clr-namespace:DDHCenter.Ui.Converters"
+        xmlns:viewModels="clr-namespace:DDHCenter.Core.ViewModels"
+        xmlns:views="clr-namespace:DDHCenter.Ui.Views"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox materialDesign:HintAssist.Hint="Selecciona medicamento" IsEditable="True" FontSize="13" Margin="10 0 15 0" Padding="10" ItemsSource="{Binding Path=Medicamentos}" SelectedItem="{Binding Path=Medicamento, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding Path=VerifySelectedElementCommand}" CommandParameter="{Binding }" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ComboBox>
+        <Button Grid.Column="1" Style="{DynamicResource MaterialDesignFloatingActionMiniAccentButton}" Margin="10 0" VerticalAlignment="Center" Height="25" Width="25" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.AddNewMedControlCommand}" CommandParameter="{Binding }" ToolTip="Eliminar medicamento">
+            <Button.Content>
+                <materialDesign:PackIcon Kind="MinusCircleOutline" Height="17" Width="17"/>
+            </Button.Content>
+        </Button>
+    </Grid>
+</UserControl>
