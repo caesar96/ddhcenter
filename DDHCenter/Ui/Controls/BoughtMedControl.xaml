@@ -5,7 +5,7 @@
         xmlns:converters="clr-namespace:DDHCenter.Ui.Converters"
         xmlns:viewModels="clr-namespace:DDHCenter.Core.ViewModels"
         xmlns:views="clr-namespace:DDHCenter.Ui.Views"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"

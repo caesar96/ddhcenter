@@ -117,6 +117,7 @@ begin
            DeleteFile(ExpandConstant('{tmp}\NDP472-KB4054530-x86-x64-AllOS-ENU.exe'));
    end;
 end;
+
 function GetNumber(var temp: String): Integer;
 var
   part: String;
@@ -208,12 +209,19 @@ begin
   end;
 end;
 
+procedure InitializeUninstallProgressForm();
+var 
+	ErrorCode: Integer;
+begin
+	Exec('taskkill.exe', '/f /im {#MyAppExeName}', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+end;
+
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall

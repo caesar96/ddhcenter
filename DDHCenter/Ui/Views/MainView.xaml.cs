@@ -62,7 +62,8 @@ namespace DDHCenter.Views
             LookForUpdatesText.Text = "Buscando...";
             LookForUpdatesProgressBar.Visibility = System.Windows.Visibility.Visible;
             PopUpBoxM.IsPopupOpen = true;
-            var systemArchitecture = IntPtr.Size == 8 ? 0 : 1;
+            var processor_architecture = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE", EnvironmentVariableTarget.Machine).ToString();
+            var systemArchitecture = processor_architecture == "AMD64" ? 0 : 1;
             //Make a request to Github
             var cliente = DDHCenter.Core.Utils.ApiClient<DDHCenter.Core.Models.GithubApiModel>.Instance;
             try

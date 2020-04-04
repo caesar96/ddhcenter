@@ -850,9 +850,11 @@
 
     <Style TargetType="TextBox" x:Key="MyTexBox" BasedOn="{StaticResource MaterialDesignFilledTextFieldTextBox}">
         <Setter Property="Margin" Value="4, 4, 4, 5" />
+		<Setter Property="FontSize" Value="12" />
     </Style>
     <Style TargetType="PasswordBox" x:Key="MyPasswordBox" BasedOn="{StaticResource MaterialDesignFilledPasswordFieldPasswordBox}">
         <Setter Property="Margin" Value="4, 4, 4, 5" />
+		<Setter Property="FontSize" Value="12" />
     </Style>
 
     <Style TargetType="DatePicker" x:Key="MyDatePicker" BasedOn="{StaticResource MaterialDesignFilledDatePicker}">
